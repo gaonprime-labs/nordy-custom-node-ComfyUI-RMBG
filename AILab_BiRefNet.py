@@ -22,6 +22,9 @@ import importlib.util
 from safetensors.torch import load_file
 import cv2
 
+torch.set_float32_matmul_precision("highest")   # 행렬곱 TF32 완전 OFF
+torch.backends.cudnn.allow_tf32 = False         # 컨볼루션 TF32 OFF
+
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Add model path
@@ -314,7 +317,7 @@ class BiRefNetModel:
                 
                 self.model.eval()
                 self.model.half()
-                torch.set_float32_matmul_precision('high')
+                # torch.set_float32_matmul_precision('high')
                 self.model.to(device)
                 self.current_model_version = model_name
                 

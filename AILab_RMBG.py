@@ -31,6 +31,9 @@ from transformers import AutoModelForImageSegmentation
 import cv2
 import types
 
+torch.set_float32_matmul_precision("highest")   # 행렬곱 TF32 완전 OFF
+torch.backends.cudnn.allow_tf32 = False         # 컨볼루션 TF32 OFF
+
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 folder_paths.add_model_folder_path("rmbg", os.path.join(folder_paths.models_dir, "RMBG"))
@@ -235,7 +238,7 @@ class RMBGModel(BaseModelLoader):
             for param in self.model.parameters():
                 param.requires_grad = False
 
-            torch.set_float32_matmul_precision('high')
+            # torch.set_float32_matmul_precision('high')
             self.model.to(device)
             self.current_model_version = model_name
             
@@ -368,7 +371,7 @@ class BENModel(BaseModelLoader):
             for param in self.model.parameters():
                 param.requires_grad = False
             
-            torch.set_float32_matmul_precision('high')
+            # torch.set_float32_matmul_precision('high')
             self.model.to(device)
             self.current_model_version = model_name
     
@@ -423,7 +426,7 @@ class BEN2Model(BaseModelLoader):
                 for param in self.model.parameters():
                     param.requires_grad = False
                 
-                torch.set_float32_matmul_precision('high')
+                # torch.set_float32_matmul_precision('high')
                 self.model.to(device)
                 self.current_model_version = model_name
                 
